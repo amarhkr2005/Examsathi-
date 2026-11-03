@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="hi"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ExamSathi</title>
+<meta name="description" content="ExamSathi – पढ़ाई का साथी, परीक्षा की तैयारी">
+<meta name="theme-color" content="#6d28d9"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%236d28d9'/%3E%3Cpath d='M32 18c-5-3-12-3-18-1v28c6-2 13-2 18 1 5-3 12-3 18-1V17c-6-2-13-2-18 1z' fill='%23fff'/%3E%3Cpath d='M32 18v28' stroke='%236d28d9' stroke-width='3'/%3E%3C/svg%3E">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"></script>
+<style>
+:root{--bg:#f5f3ff;--cd:#fff;--tx:#1e1b4b;--mu:#6b7280;--bd:#e5e7eb;--pr:#6d28d9;--sc:#2563eb;--rc:20px;--rb:14px}
+@media(prefers-color-scheme:dark){:root:not([data-mode=light]){--bg:#0f0c1d;--cd:#1a1630;--tx:#ede9fe;--mu:#a1a1c5;--bd:#2d2850}}
+:root[data-mode=dark]{--bg:#0f0c1d;--cd:#1a1630;--tx:#ede9fe;--mu:#a1a1c5;--bd:#2d2850}
+:root[data-card=flat]{--rc:6px}:root[data-btn=pill]{--rb:30px}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:16px system-ui,sans-serif;padding:env(safe-area-inset-top,0) 0 calc(76px + env(safe-area-inset-bottom,0))}
+a{color:inherit;text-decoration:none}.w{max-width:680px;margin:auto;padding:14px}
+.hero{background:linear-gradient(135deg,var(--pr),var(--sc));color:#fff;border-radius:var(--rc);padding:20px;margin-bottom:14px}
+.hero h1{margin:0;font-size:26px;display:flex;gap:10px;align-items:center}.hero p{margin:6px 0 0;opacity:.92;font-size:14px}
+.g{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(min-width:700px){.g{grid-template-columns:repeat(3,1fr)}}
+.c{background:var(--cd);border:1px solid var(--bd);border-radius:var(--rc);padding:16px;display:block;margin-bottom:10px;box-shadow:0 2px 8px #0000000d}
+.g .c{margin:0;text-align:center;font-weight:600}.g .c i{font-style:normal;font-size:34px;display:block;margin-bottom:4px}
+small,.mu{color:var(--mu);font-size:13px}.row{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+button,.b{background:var(--pr);color:#fff;border:0;border-radius:var(--rb);padding:11px 16px;font:inherit;cursor:pointer;display:inline-block;text-align:center}
+.o{background:transparent;color:var(--pr);border:1px solid var(--pr)}.dg{background:#dc2626}.sm{padding:7px 11px;font-size:14px}.full{width:100%}
+input,select,textarea{width:100%;padding:12px;border-radius:12px;border:1px solid var(--bd);background:var(--cd);color:var(--tx);font:inherit;margin:5px 0 12px}input[type=color]{height:46px;padding:3px}
+label{font-size:13px;color:var(--mu)}h2{margin:6px 0 12px;font-size:20px}h3{margin:18px 0 6px;font-size:15px;color:var(--pr)}
+#nav{position:fixed;bottom:0;left:0;right:0;background:var(--cd);border-top:1px solid var(--bd);display:flex;padding-bottom:env(safe-area-inset-bottom,0)}
+#nav a{flex:1;text-align:center;padding:9px 0;font-size:12px;color:var(--mu)}#nav a i{display:block;font-style:normal;font-size:20px}#nav a.on{color:var(--pr);font-weight:600}
+.chips{display:flex;gap:6px;overflow-x:auto;margin-bottom:12px}.chips a{white-space:nowrap;padding:8px 12px;border-radius:20px;border:1px solid var(--bd);background:var(--cd);font-size:14px}.chips a.on{background:var(--pr);color:#fff}
+#t{position:fixed;left:50%;transform:translateX(-50%);bottom:92px;padding:12px 18px;border-radius:12px;color:#fff;z-index:99;max-width:90%}
+.mo{position:fixed;inset:0;background:#0009;display:flex;align-items:center;justify-content:center;z-index:50;padding:20px}.mo>div{background:var(--cd);padding:20px;border-radius:var(--rc);max-width:380px;width:100%}
+.vw{height:calc(100vh - 160px);overflow:auto;background:#6b7280;border-radius:12px;padding:6px;text-align:center}.vw canvas{display:block;margin:0 auto 8px;background:#fff}
+.top{display:flex;gap:10px;align-items:center;margin-bottom:10px}.top b{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.err{color:#dc2626}.ok{color:#16a34a}.ban{border-radius:var(--rc);width:100%;max-height:160px;object-fit:cover;margin-bottom:12px}
+.ann{background:#fef3c7;color:#78350f;border-radius:var(--rc);padding:12px;margin-bottom:12px}.sp{display:flex;height:100vh;align-items:center;justify-content:center;flex-direction:column;gap:8px;background:linear-gradient(135deg,var(--pr),var(--sc));color:#fff}
+.av{width:72px;height:72px;border-radius:50%;object-fit:cover;background:var(--bd)}
+</style></head><body>
+<div id="app"></div><div id="t" hidden></div>
+<script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))</script>
+<script type="module">
+import {config} from "./firebase-config.js";
+const B="https://cdn.jsdelivr.net/npm/firebase@10.14.1/";
+const [{initializeApp},A,F]=await Promise.all(["app","auth","firestore"].map(x=>import(`${B}${x}/+esm`)));
+const fb=initializeApp(config),au=A.getAuth(fb),db=F.getFirestore(fb);
+/* SECURITY: admin rights come ONLY from the Firestore doc admins/{uid} (created manually in the console) and are enforced by firestore.rules/storage.rules. Hiding UI below is cosmetic. */
+const DEF={appName:"ExamSathi",tagline:"पढ़ाई का साथी, परीक्षा की तैयारी",heading:"Class 12 Study Material",subtitle:"अपना subject चुनें",about:"ExamSathi – Class 12 की तैयारी के लिए PDFs, chapter-wise.",bannerText:"",bannerImage:"",annOn:false,annText:"",primary:"#6d28d9",secondary:"#2563eb",mode:"auto",card:"round",btn:"round",instagram:"https://www.instagram.com/amar._.naagar?vrfl=NXd1bzFhaHI3dml1",logo:""};
+let U=null,ADM=false,ready=false,S={settings:DEF,subjects:[],chapters:[],pdfs:[],got:{}},unsub=[],drawn=false,CS="",conf=null;
+const $=s=>document.querySelector(s),esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const tt=(m,k)=>{const t=$("#t");t.textContent=m;t.style.background=k==="err"?"#dc2626":"#16a34a";t.hidden=false;clearTimeout(t.h);t.h=setTimeout(()=>t.hidden=true,3500)};
+const er=x=>tt(x&&x.code==="permission-denied"?"आपको इसकी अनुमति नहीं है।":/network/i.test(x&&x.code||"")?"Network error: internet जाँचें।":"Error: "+(x&&x.message||x),"err");
+const O=l=>[...l].sort((a,b)=>(a.order||0)-(b.order||0)),sub=id=>S.subjects.find(x=>x.id===id),chp=id=>S.chapters.find(x=>x.id===id);
+const opt=(l,v)=>l.map(x=>`<option value="${x.id}" ${x.id===v?"selected":""}>${esc(x.name)}</option>`).join("");
+const inp=(id,l,v="",t="text")=>`<label>${l}</label><input id="${id}" type="${t}" value="${esc(v)}">`;
+const doc=(c,i)=>F.doc(db,c,i),col=c=>F.collection(db,c),upd=(c,i,d)=>F.updateDoc(doc(c,i),d).catch(er);
+const logo=(s=36)=>S.settings.logo?`<img src="${esc(S.settings.logo)}" width="${s}" height="${s}" style="border-radius:10px" alt="">`:`<svg width="${s}" height="${s}" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#fff"/><path d="M32 18c-5-3-12-3-18-1v28c6-2 13-2 18 1 5-3 12-3 18-1V17c-6-2-13-2-18 1z" fill="#6d28d9"/><path d="M32 18v28" stroke="#fff" stroke-width="3"/></svg>`;
+function theme(){const s=S.settings,r=document.documentElement;r.style.setProperty("--pr",s.primary);r.style.setProperty("--sc",s.secondary);r.dataset.mode=s.mode;r.dataset.card=s.card;r.dataset.btn=s.btn;document.title=s.appName}
+function ask(html,ok,yes="OK"){const d=document.createElement("div");d.className="mo";d.innerHTML=`<div>${html}<div class="row" style="margin-top:12px"><button class="o" id="mc">Cancel</button><button id="my">${yes}</button></div></div>`;document.body.appendChild(d);d.querySelector("#mc").onclick=()=>d.remove();d.querySelector("#my").onclick=async()=>{await ok(d);d.remove()};return d}
+/* ---- data ---- */
+function listen(){unsub.forEach(f=>f());unsub=[];S.got={};
+ unsub.push(F.onSnapshot(doc("settings","app"),s=>{S.settings={...DEF,...(s.data()||{})};S.got.settings=1;theme();render(1)},er));
+ if(!U)return;const q=(c,f,v)=>ADM?col(c):F.query(col(c),F.where(f,"==",v));
+ [["subjects","visible",true],["chapters","visible",true],["pdfs","status","visible"]].forEach(([c,f,v])=>unsub.push(F.onSnapshot(q(c,f,v),s=>{S[c]=s.docs.map(d=>({id:d.id,...d.data()}));S.got[c]=1;render(1)},er)))}
+A.onAuthStateChanged(au,async u=>{U=u;ADM=false;if(u){try{ADM=(await F.getDoc(doc("admins",u.uid))).exists()}catch(x){}
+ F.setDoc(doc("users",u.uid),{name:u.displayName||"",email:u.email||"",phone:u.phoneNumber||"",photo:u.photoURL||"",lastLogin:Date.now()},{merge:true}).catch(()=>{})}
+ ready=true;listen();render()});
+/* ---- shell / router ---- */
+const shell=(b,nav=1)=>{$("#app").innerHTML=`<div class="w">${b}</div>`;$("#nav")&&($("#nav").style.display=nav?"flex":"none")};
+document.body.insertAdjacentHTML("beforeend",`<nav id="nav" style="display:none"><a href="#/" data-k=""><i>🏠</i>Home</a><a href="#/subjects" data-k="subjects"><i>📚</i>Subjects</a><a href="#/search" data-k="search"><i>🔍</i>Search</a><a href="#/profile" data-k="profile"><i>👤</i>Profile</a></nav>`);
+addEventListener("hashchange",()=>{drawn=false;render()});
+function render(snap){const p=location.hash.slice(2).split("/"),a=p[0]||"",b=p[1];
+ if(!ready){$("#app").innerHTML=`<div class="sp"><div style="font-size:50px">📘</div><h1 style="margin:0">ExamSathi</h1><small style="color:#fff">${esc(DEF.tagline)}</small></div>`;$("#nav").style.display="none";return}
+ const isAdm=a.startsWith("admin");
+ if(snap&&drawn)return;
+ if(a==="admin-login")return adminLogin();
+ if(!U)return login();
+ if(isAdm){if(!ADM){location.hash="#/admin-login";return}
+  if(!(S.got.settings&&S.got.subjects&&S.got.chapters&&S.got.pdfs)){shell("<p class=mu>Loading…</p>",0);return}
+  const f={"admin":dash,"admin-pdfs":apdfs,"admin-add":aadd,"admin-subjects":asubs,"admin-chapters":achaps,"admin-settings":aset,"admin-account":aacc}[a];(f||dash)();drawn=["admin-add","admin-settings","admin-account","admin-chapters"].includes(a);return}
+ document.querySelectorAll("#nav a").forEach(x=>x.classList.toggle("on",x.dataset.k===(a==="s"||a==="c"?"subjects":a)));
+ if(!S.got.subjects){shell(`<p class=mu>Loading…</p>`);return}
+ ({"":home,subjects:subs,s:chaps,c:pdfl,v:view,search,profile})[a]?.(b)??home()}
+const hd=()=>`<div class="hero"><h1>${logo()}${esc(S.settings.appName)}</h1><p>${esc(S.settings.tagline)}</p></div>`;
+const nsub=id=>S.pdfs.filter(x=>x.subjectId===id).length;
+const pcard=x=>`<a class="c" href="#/v/${x.id}"><b>📄 ${esc(x.name)}</b><br><small>${esc(sub(x.subjectId)?.icon||"")} ${esc(sub(x.subjectId)?.name||"")} › ${esc(chp(x.chapterId)?.name||"")}</small></a>`;
+const insta=()=>S.settings.instagram?`<a class="b o full" style="margin-top:10px" target="_blank" rel="noopener" href="${esc(S.settings.instagram)}">📷 Instagram</a>`:"";
+/* ---- student ---- */
+function login(){const s=S.settings;shell(`${hd()}<div class="c"><h2>Login</h2><button class="full" data-a="google">Continue with Google</button><h3>Phone + OTP</h3>${inp("ph","Mobile number (+91 default)","","tel")}<div id="rc"></div><button class="o full" data-a="otp">OTP भेजें</button><div id="ob" hidden>${inp("co","OTP","","text")}<button class="full" data-a="vfy">Verify</button></div><h3>Email</h3>${inp("em","Email","","email")}${inp("pw","Password","","password")}<div class="row"><button data-a="elogin">Login</button><button class="o" data-a="ereg">Register</button><button class="o sm" data-a="reset">Password भूल गए?</button></div><p id="m" class="err"></p></div>`,0)}
+const le=x=>{const m=$("#m");(m?m:{}).textContent="Login नहीं हो सका: "+(x.code||x.message);tt("Login error","err")};
+function home(){const s=S.settings;shell(`${hd()}${s.annOn&&s.annText?`<div class="ann">📢 ${esc(s.annText)}</div>`:""}${s.bannerImage?`<img class="ban" src="${esc(s.bannerImage)}" alt="">`:""}${s.bannerText?`<div class="c"><b>${esc(s.bannerText)}</b></div>`:""}<h2>${esc(s.heading)}</h2><p class="mu" style="margin-top:-8px">${esc(s.subtitle)}</p><div class="g">${O(S.subjects).map(x=>`<a class="c" href="#/s/${x.id}"><i>${esc(x.icon||"📘")}</i>${esc(x.name)}<br><small>${nsub(x.id)} PDF</small></a>`).join("")}</div>${S.subjects.length?"":`<p class=mu>अभी कोई subject उपलब्ध नहीं है।</p>`}${insta()}`)}
+function subs(){shell(`<h2>Subjects</h2>${O(S.subjects).map(x=>`<a class="c row" href="#/s/${x.id}"><b>${esc(x.icon)} ${esc(x.name)}</b><small>${S.chapters.filter(c=>c.subjectId===x.id).length} chapters · ${nsub(x.id)} PDF</small></a>`).join("")||`<p class=mu>कोई subject नहीं।</p>`}`)}
+function chaps(id){const s=sub(id);if(!s)return home();shell(`<div class="top"><a class="b o sm" href="#/subjects">←</a><b>${esc(s.icon)} ${esc(s.name)}</b></div>${O(S.chapters.filter(c=>c.subjectId===id)).map(c=>`<a class="c row" href="#/c/${c.id}"><b>${esc(c.name)}</b><small>${S.pdfs.filter(p=>p.chapterId===c.id).length} PDF</small></a>`).join("")||`<p class=mu>इस subject में अभी chapters उपलब्ध नहीं हैं।</p>`}`)}
+function pdfl(id){const c=chp(id);if(!c)return home();const l=S.pdfs.filter(p=>p.chapterId===id);shell(`<div class="top"><a class="b o sm" href="#/s/${c.subjectId}">←</a><b>${esc(c.name)}</b></div>${l.map(pcard).join("")||`<p class=mu>इस chapter में अभी study material उपलब्ध नहीं है।</p>`}`)}
+function search(){shell(`<h2>Search</h2><input id="q" placeholder="PDF, chapter या subject" autofocus><div id="r"></div>`);const f=()=>{const q=$("#q").value.trim().toLowerCase();$("#r").innerHTML=S.pdfs.filter(x=>(x.name+" "+(chp(x.chapterId)?.name||"")+" "+(sub(x.subjectId)?.name||"")).toLowerCase().includes(q)).map(pcard).join("")||`<p class=mu>कोई PDF नहीं मिली।</p>`};$("#q").oninput=f;f()}
+function profile(){shell(`<div class="c" style="text-align:center">${U.photoURL?`<img class="av" src="${esc(U.photoURL)}" alt="">`:`<div class="av" style="display:inline-block;font-size:40px;line-height:72px">👤</div>`}<h2>${esc(U.displayName||"Student")}</h2><p class="mu">${esc(U.email||U.phoneNumber||"")}</p></div><div class="c">${esc(S.settings.about)}</div>${insta()}${ADM?`<a class="b full" style="margin-top:10px" href="#/admin">⚙️ Admin Panel</a>`:""}<button class="o full" style="margin-top:10px" data-a="out">Logout</button>`)}
+async function view(id){const x=S.pdfs.find(p=>p.id===id);if(!x){shell(`<a class="b o sm" href="#/">←</a><p class="err">PDF उपलब्ध नहीं है।</p>`);return}
+ const dm=x.url.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?.*?id=)([\w-]+)/);
+ if(dm){shell(`<div class="top"><a class="b o sm" href="javascript:history.back()">←</a><b>${esc(x.name)}</b></div><iframe src="https://drive.google.com/file/d/${dm[1]}/preview" style="width:100%;height:calc(100vh - 150px);border:0;border-radius:12px;background:#fff"></iframe><a class="b sm o" style="margin-top:8px" target="_blank" href="${esc(x.url)}">Open</a>`,0);return}
+ shell(`<div class="top"><a class="b o sm" href="javascript:history.back()">←</a><b>${esc(x.name)}</b><span id="pg" class="mu"></span></div><div class="vw" id="vw"><p style="color:#fff">PDF load हो रही है…</p></div><div class="row" style="margin-top:8px"><button class="sm" id="zo">−</button><button class="sm" id="zi">+</button><button class="sm o" id="fs">⛶ Full</button><a class="b sm o" target="_blank" href="${esc(x.url)}">Open</a></div>`,0);
+ let d,z=1,tk=0;const vw=$("#vw");try{d=await pdfjsLib.getDocument({url:x.url}).promise}catch(e){vw.innerHTML=`<p style="color:#fff">PDF उपलब्ध नहीं है या network error. "Open" दबाएँ।</p>`;return}
+ const pgn=()=>{let n=1;[...vw.children].forEach((c,i)=>{if(c.offsetTop-vw.offsetTop<=vw.scrollTop+40)n=i+1});$("#pg")&&($("#pg").textContent=n+" / "+d.numPages)};
+ const draw=async()=>{const my=++tk;vw.innerHTML="";const w=vw.clientWidth-12,dp=Math.min(devicePixelRatio||1,2);for(let i=1;i<=d.numPages;i++){if(my!==tk)return;const pg=await d.getPage(i),sc=w/pg.getViewport({scale:1}).width*z,vp=pg.getViewport({scale:sc*dp}),cv=document.createElement("canvas");cv.width=vp.width;cv.height=vp.height;cv.style.width=vp.width/dp+"px";vw.appendChild(cv);await pg.render({canvasContext:cv.getContext("2d"),viewport:vp}).promise;if(i===1)pgn()}};
+ vw.onscroll=pgn;$("#zi").onclick=()=>{z=Math.min(3,z+.25);draw()};$("#zo").onclick=()=>{z=Math.max(.5,z-.25);draw()};$("#fs").onclick=()=>vw.requestFullscreen?vw.requestFullscreen():tt("Full screen उपलब्ध नहीं","err");draw()}
+/* ---- admin ---- */
+function adminLogin(){shell(`<div class="hero"><h1>${logo()}Admin Login</h1><p>केवल authorized Admin</p></div><div class="c">${inp("em","Admin Email","","email")}${inp("pw","Password","","password")}<p id="m" class="err"></p><button class="full" data-a="alogin">Login</button><a class="b o full" style="margin-top:10px" href="#/">← Student app</a></div>`,0)}
+const anav=k=>`<div class="chips">${[["admin","Dashboard"],["admin-add","Add PDF"],["admin-pdfs","PDFs"],["admin-subjects","Subjects"],["admin-chapters","Chapters"],["admin-settings","Settings"],["admin-account","Account"]].map(x=>`<a class="${k===x[0]?"on":""}" href="#/${x[0]}">${x[1]}</a>`).join("")}<a href="#/">Student view</a></div>`;
+const ash=(k,b)=>shell(anav(k)+b,0);
+function dash(){ash("admin",`<h2>Dashboard</h2><div class="g">${[["Total PDFs",S.pdfs.length],["Total Subjects",S.subjects.length],["Total Chapters",S.chapters.length],["Total Users",'<span id="uc">…</span>']].map(x=>`<div class="c"><i>${x[0].includes("PDF")?"📄":x[0].includes("Sub")?"📚":x[0].includes("Chap")?"🔖":"👥"}</i>${x[1]}<br><small>${x[0]}</small></div>`).join("")}</div>${S.subjects.length?"":`<div class="c" style="margin-top:12px"><p>अभी कोई subject नहीं है।</p><button data-a="seed">Mathematics, Physics, Chemistry, Hindi, English बनाएँ</button></div>`}`);
+ F.getCountFromServer(col("users")).then(r=>$("#uc")&&($("#uc").textContent=r.data().count)).catch(()=>$("#uc")&&($("#uc").textContent="–"))}
+function aadd(){const s0=O(S.subjects)[0];ash("admin-add",`<h2>Add PDF</h2><div class="c">${inp("n","PDF Name")}${inp("u","PDF Link (Google Drive share link)","","url")}<small class="mu">Drive में PDF → Share → "Anyone with the link" → Copy link</small><br><br><label>Subject</label><select id="s">${opt(O(S.subjects))}</select><label>Chapter</label><select id="c">${opt(O(S.chapters.filter(c=>c.subjectId===s0?.id)))}</select><p id="m"></p><button class="full" data-a="save">Save PDF</button></div>${S.subjects.length?"":`<p class="err">पहले Subjects में subject जोड़ें।</p>`}`)}
+function apdfs(){ash("admin-pdfs",`<h2>Manage PDFs</h2><input type="file" id="rf" accept="application/pdf" hidden>${S.pdfs.sort((a,b)=>b.createdAt-a.createdAt).map(x=>`<div class="c"><b>📄 ${esc(x.name)}</b> ${x.status==="hidden"?"<small class=err>(Hidden)</small>":""}<br><small>${esc(sub(x.subjectId)?.name||"?")} › ${esc(chp(x.chapterId)?.name||"?")}</small><div class="row" style="margin-top:10px"><a class="b sm o" href="#/v/${x.id}">Open</a><button class="sm o" data-a="ren" data-i="${x.id}">Rename</button><button class="sm o" data-a="mov" data-i="${x.id}">Move/Edit</button><button class="sm o" data-a="rep" data-i="${x.id}">Change link</button><button class="sm o" data-a="hid" data-i="${x.id}">${x.status==="hidden"?"Show":"Hide"}</button><button class="sm dg" data-a="del" data-i="${x.id}">Delete</button></div></div>`).join("")||`<p class=mu>अभी कोई PDF नहीं है।</p>`}`)}
+function asubs(){const l=O(S.subjects);ash("admin-subjects",`<h2>Manage Subjects</h2>${l.map((x,i)=>`<div class="c"><b>${esc(x.icon)} ${esc(x.name)}</b> ${x.visible?"":"<small class=err>(Hidden)</small>"}<div class="row" style="margin-top:10px"><button class="sm o" data-a="sup" data-i="${x.id}" ${i?"":"disabled"}>↑</button><button class="sm o" data-a="sdn" data-i="${x.id}" ${i<l.length-1?"":"disabled"}>↓</button><button class="sm o" data-a="sren" data-i="${x.id}">Rename</button><button class="sm o" data-a="sico" data-i="${x.id}">Icon</button><button class="sm o" data-a="svis" data-i="${x.id}">${x.visible?"Hide":"Show"}</button><button class="sm dg" data-a="sdel" data-i="${x.id}">Delete</button></div></div>`).join("")}<div class="c"><h3>नया Subject</h3>${inp("sn","Name")}${inp("si","Icon (emoji)","📘")}<button class="full" data-a="sadd">Add Subject</button></div>`)}
+function achaps(){const sl=O(S.subjects);if(!CS||!sub(CS))CS=sl[0]?.id||"";const l=O(S.chapters.filter(c=>c.subjectId===CS));ash("admin-chapters",`<h2>Manage Chapters</h2><label>Subject</label><select id="cs">${opt(sl,CS)}</select>${l.map((x,i)=>`<div class="c"><b>${esc(x.name)}</b> ${x.visible?"":"<small class=err>(Hidden)</small>"}<div class="row" style="margin-top:10px"><button class="sm o" data-a="cup" data-i="${x.id}" ${i?"":"disabled"}>↑</button><button class="sm o" data-a="cdn" data-i="${x.id}" ${i<l.length-1?"":"disabled"}>↓</button><button class="sm o" data-a="cren" data-i="${x.id}">Rename</button><button class="sm o" data-a="cvis" data-i="${x.id}">${x.visible?"Hide":"Show"}</button><button class="sm dg" data-a="cdel" data-i="${x.id}">Delete</button></div></div>`).join("")}<div class="c"><h3>नया Chapter</h3>${inp("cn","Chapter name")}<button class="full" data-a="cadd">Add Chapter</button></div>`)}
+function aset(){const s=S.settings,f=(id,l,t="text")=>inp("st_"+id,l,s[id],t),sl=(id,l,o)=>`<label>${l}</label><select id="st_${id}">${o.map(x=>`<option ${x===s[id]?"selected":""}>${x}</option>`).join("")}</select>`;
+ ash("admin-settings",`<h2>App Settings</h2><h3>Branding</h3>${f("appName","App Name")}${f("tagline","Tagline")}${f("logo","Logo URL (optional)")}<label>About</label><textarea id="st_about" rows="3">${esc(s.about)}</textarea><h3>Home</h3>${f("heading","Heading")}${f("subtitle","Subtitle")}${f("bannerText","Banner text")}${f("bannerImage","Banner image URL")}${f("annText","Announcement text")}<label><input type="checkbox" id="st_annOn" ${s.annOn?"checked":""} style="width:auto;margin-right:8px">Announcement दिखाएँ</label><h3>Theme</h3>${f("primary","Primary color","color")}${f("secondary","Secondary color","color")}${sl("mode","Mode",["auto","light","dark"])}${sl("card","Card style",["round","flat"])}${sl("btn","Button style",["round","pill"])}<h3>Social</h3>${f("instagram","Instagram link")}<button class="full" data-a="sset">Save Settings</button>`)}
+function aacc(){ash("admin-account",`<h2>Admin Account</h2><div class="c"><b>${esc(U.email||"")}</b><br><small>UID: ${esc(U.uid)}</small></div><div class="c"><h3>Change Password</h3>${inp("p0","Current Password","","password")}${inp("p1","New Password (6+)","","password")}${inp("p2","Confirm New Password","","password")}<p id="m"></p><button class="full" data-a="cpw">Save</button></div><button class="o full" data-a="out">Logout</button>`)}
+/* ---- actions ---- */
+const msg=(t,k)=>{const m=$("#m");if(m){m.className=k;m.textContent=t}};
+const swap=async(l,i,d)=>{const L=O(l),k=L.findIndex(x=>x.id===i),o=L[k+d];if(!o)return;const c=l===S.subjects?"subjects":"chapters";L.forEach((x,n)=>x.order=n);await Promise.all([upd(c,L[k].id,{order:o.order}),upd(c,o.id,{order:L[k].order})])};
+const vis=(c,x)=>upd(c,x.id,{visible:!x.visible});
+const ACT={
+ google:()=>A.signInWithPopup(au,new A.GoogleAuthProvider()).catch(le),
+ elogin:()=>A.signInWithEmailAndPassword(au,$("#em").value.trim(),$("#pw").value).catch(le),
+ ereg:()=>A.createUserWithEmailAndPassword(au,$("#em").value.trim(),$("#pw").value).catch(le),
+ reset:()=>A.sendPasswordResetEmail(au,$("#em").value.trim()).then(()=>tt("Reset email भेज दी गई")).catch(le),
+ otp:async()=>{let n=$("#ph").value.trim().replace(/\s/g,"");if(!n.startsWith("+"))n="+91"+n;try{window.rv??=new A.RecaptchaVerifier(au,"rc",{size:"invisible"});conf=await A.signInWithPhoneNumber(au,n,window.rv);$("#ob").hidden=false;tt("OTP भेज दिया गया")}catch(x){le(x)}},
+ vfy:()=>conf?conf.confirm($("#co").value.trim()).catch(le):tt("पहले OTP भेजें","err"),
+ out:()=>A.signOut(au).then(()=>{location.hash="#/"}),
+ alogin:async()=>{try{const c=await A.signInWithEmailAndPassword(au,$("#em").value.trim(),$("#pw").value);if(!(await F.getDoc(doc("admins",c.user.uid))).exists()){await A.signOut(au);return msg("यह account Admin नहीं है।","err")}ADM=true;location.hash="#/admin"}catch(x){msg("Admin login नहीं हो सका: "+(x.code||x.message),"err")}},
+ seed:async()=>{for(const [i,[n,ic]] of [["Mathematics","📘"],["Physics","📗"],["Chemistry","📙"],["Hindi","📕"],["English","📒"]].entries())await F.addDoc(col("subjects"),{name:n,icon:ic,order:i,visible:true}).catch(er)},
+ save:async()=>{const n=$("#n").value.trim(),u=$("#u").value.trim(),s=$("#s").value,c=$("#c").value;
+  if(!/^https?:\/\//.test(u))return msg("सही PDF link डालें।","err");if(!n||!s||!c)return msg("नाम, Subject और Chapter ज़रूरी हैं।","err");
+  try{await F.addDoc(col("pdfs"),{name:n,subjectId:s,chapterId:c,url:u,status:"visible",createdAt:Date.now()});tt("PDF save हो गई");location.hash="#/admin-pdfs"}catch(x){msg("PDF save नहीं हो सकी। कृपया दोबारा कोशिश करें।","err")}},
+ ren:i=>{const x=S.pdfs.find(p=>p.id===i),n=(prompt("नया नाम",x.name)||"").trim();n&&upd("pdfs",i,{name:n})},
+ hid:i=>{const x=S.pdfs.find(p=>p.id===i);upd("pdfs",i,{status:x.status==="hidden"?"visible":"hidden"})},
+ mov:i=>{const x=S.pdfs.find(p=>p.id===i);ask(`<label>Subject</label><select id="ms">${opt(O(S.subjects),x.subjectId)}</select><label>Chapter</label><select id="mc2">${opt(O(S.chapters.filter(c=>c.subjectId===x.subjectId)),x.chapterId)}</select>`,async d=>{await upd("pdfs",i,{subjectId:d.querySelector("#ms").value,chapterId:d.querySelector("#mc2").value});tt("Update हो गया")},"Save").querySelector("#ms").onchange=ev=>{ev.target.parentNode.querySelector("#mc2").innerHTML=opt(O(S.chapters.filter(c=>c.subjectId===ev.target.value)))}},
+ rep:i=>{const u=(prompt("नया PDF link")||"").trim();if(/^https?:\/\//.test(u))upd("pdfs",i,{url:u});else if(u)tt("सही link डालें","err")},
+ del:i=>{const x=S.pdfs.find(p=>p.id===i);ask("क्या आप इस PDF को delete करना चाहते हैं?",async()=>{try{await F.deleteDoc(doc("pdfs",i));tt("PDF delete हो गई")}catch(e){er(e)}},"Delete").querySelector("#my").className="dg"},
+ sadd:async()=>{const n=$("#sn").value.trim();if(!n)return tt("नाम लिखें","err");await F.addDoc(col("subjects"),{name:n,icon:$("#si").value||"📘",order:S.subjects.length,visible:true}).catch(er);$("#sn").value=""},
+ sup:i=>swap(S.subjects,i,-1),sdn:i=>swap(S.subjects,i,1),
+ sren:i=>{const n=(prompt("नया नाम",sub(i).name)||"").trim();n&&upd("subjects",i,{name:n})},sico:i=>{const n=(prompt("Emoji icon",sub(i).icon)||"").trim();n&&upd("subjects",i,{icon:n})},svis:i=>vis("subjects",sub(i)),
+ sdel:i=>S.chapters.some(c=>c.subjectId===i)||S.pdfs.some(p=>p.subjectId===i)?tt("पहले इस subject के chapters/PDFs हटाएँ।","err"):ask("इस subject को delete करें?",()=>F.deleteDoc(doc("subjects",i)).catch(er),"Delete"),
+ cadd:async()=>{const n=$("#cn").value.trim();if(!n||!CS)return tt("नाम लिखें","err");await F.addDoc(col("chapters"),{subjectId:CS,name:n,order:S.chapters.filter(c=>c.subjectId===CS).length,visible:true}).catch(er);$("#cn").value=""},
+ cup:i=>swap(S.chapters.filter(c=>c.subjectId===CS),i,-1),cdn:i=>swap(S.chapters.filter(c=>c.subjectId===CS),i,1),
+ cren:i=>{const n=(prompt("नया नाम",chp(i).name)||"").trim();n&&upd("chapters",i,{name:n})},cvis:i=>vis("chapters",chp(i)),
+ cdel:i=>S.pdfs.some(p=>p.chapterId===i)?tt("पहले इस chapter की PDFs हटाएँ।","err"):ask("इस chapter को delete करें?",()=>F.deleteDoc(doc("chapters",i)).catch(er),"Delete"),
+ sset:async()=>{const o={};["appName","tagline","logo","about","heading","subtitle","bannerText","bannerImage","annText","primary","secondary","mode","card","btn","instagram"].forEach(k=>o[k]=$("#st_"+k).value.trim());o.annOn=$("#st_annOn").checked;if(!o.appName)return tt("App name ज़रूरी है","err");try{await F.setDoc(doc("settings","app"),o,{merge:true});tt("Settings save हो गईं")}catch(x){er(x)}},
+ cpw:async()=>{const a=$("#p0").value,b=$("#p1").value,c=$("#p2").value;if(b.length<6)return msg("New password कम से कम 6 अक्षर का हो।","err");if(b!==c)return msg("New और Confirm password समान नहीं हैं।","err");
+  try{await A.reauthenticateWithCredential(U,A.EmailAuthProvider.credential(U.email,a));await A.updatePassword(U,b);["p0","p1","p2"].forEach(i=>$("#"+i).value="");msg("Admin password successfully changed.","ok")}catch(x){msg(x.code==="auth/invalid-credential"||x.code==="auth/wrong-password"?"Current password गलत है।":"Error: "+x.code,"err")}}};
+document.addEventListener("click",ev=>{const t=ev.target.closest("[data-a]");t&&ACT[t.dataset.a]&&ACT[t.dataset.a](t.dataset.i)});
+document.addEventListener("change",ev=>{const t=ev.target;if(t.id==="s"&&$("#c"))$("#c").innerHTML=opt(O(S.chapters.filter(c=>c.subjectId===t.value)));if(t.id==="cs"){CS=t.value;drawn=false;render()}});
+</script></body></html>
