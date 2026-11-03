@@ -35,13 +35,12 @@ label{font-size:13px;color:var(--mu)}h2{margin:6px 0 12px;font-size:20px}h3{marg
 .ann{background:#fef3c7;color:#78350f;border-radius:var(--rc);padding:12px;margin-bottom:12px}.sp{display:flex;height:100vh;align-items:center;justify-content:center;flex-direction:column;gap:8px;background:linear-gradient(135deg,var(--pr),var(--sc));color:#fff}
 .av{width:72px;height:72px;border-radius:50%;object-fit:cover;background:var(--bd)}
 </style></head><body>
-<div id="app"><div style="padding:60px 20px;text-align:center;font-size:18px">📘 ExamSathi लोड हो रही है…</div></div><div id="t" hidden></div>
-<script>const showE=m=>{const a=document.getElementById("app");if(a)a.innerHTML='<div style="padding:20px;color:#dc2626;word-break:break-word"><b>Error:</b> '+String(m).replace(/</g,"&lt;")+"</div>"};addEventListener("error",e=>showE(e.message||"load error"));addEventListener("unhandledrejection",e=>showE(e.reason&&e.reason.message||e.reason))</script>
+<div id="app"></div><div id="t" hidden></div>
 <script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))</script>
 <script type="module">
 import {config} from "./firebase-config.js";
-const B="https://www.gstatic.com/firebasejs/10.14.1/firebase-";
-const [{initializeApp},A,F]=await Promise.all(["app","auth","firestore"].map(x=>import(`${B}${x}.js`)));
+const B="https://cdn.jsdelivr.net/npm/firebase@10.14.1/";
+const [{initializeApp},A,F]=await Promise.all(["app","auth","firestore"].map(x=>import(`${B}${x}/+esm`)));
 const fb=initializeApp(config),au=A.getAuth(fb),db=F.getFirestore(fb);
 /* SECURITY: admin rights come ONLY from the Firestore doc admins/{uid} (created manually in the console) and are enforced by firestore.rules/storage.rules. Hiding UI below is cosmetic. */
 const DEF={appName:"ExamSathi",tagline:"पढ़ाई का साथी, परीक्षा की तैयारी",heading:"Class 12 Study Material",subtitle:"अपना subject चुनें",about:"ExamSathi – Class 12 की तैयारी के लिए PDFs, chapter-wise.",bannerText:"",bannerImage:"",annOn:false,annText:"",primary:"#6d28d9",secondary:"#2563eb",mode:"auto",card:"round",btn:"round",instagram:"https://www.instagram.com/amar._.naagar?vrfl=NXd1bzFhaHI3dml1",logo:""};
