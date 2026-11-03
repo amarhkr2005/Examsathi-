@@ -1,0 +1,23 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{db}/documents {
+    function signed() { return request.auth != null; }
+    function isAdmin() { return signed() && (exists(/databases/$(db)/documents/admins/$(request.auth.uid)) || request.auth.token.email == 'amarhkr2005@gmail.com'); }
+
+    // Admin allowlist: केवल Console से बनाएँ, app से कोई नहीं लिख सकता
+    match /admins/{id} { allow read: if signed() && request.auth.uid == id; allow write: if false; }
+
+    match /users/{id} {
+      allow read: if signed() && (request.auth.uid == id || isAdmin());
+      allow create, update: if signed() && request.auth.uid == id
+        && request.resource.data.keys().hasOnly(['name','email','phone','photo','lastLogin']);
+      allow delete: if isAdmin();
+    }
+    // Branding login से पहले भी दिखती है
+    match /settings/{id} { allow read: if true; allow write: if isAdmin(); }
+
+    match /subjects/{id} { allow read: if signed() && (resource.data.visible == true || isAdmin()); allow write: if isAdmin(); }
+    match /chapters/{id} { allow read: if signed() && (resource.data.visible == true || isAdmin()); allow write: if isAdmin(); }
+    match /pdfs/{id}     { allow read: if signed() && (resource.data.status == 'visible' || isAdmin()); allow write: if isAdmin(); }
+  }
+}
